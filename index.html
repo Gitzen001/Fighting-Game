@@ -1,62 +1,122 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
     <style>
-        *{
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
-
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        overflow: hidden;
+        background-color: lightblue;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Container div -->
-    <div style="position: relative; display: inline-block;">
-        <div style="position: absolute; display: flex; width: 100%; align-items: center; padding: 20px;">
-            <!-- Player Health -->
-            <div style="position: relative; height: 30px; width: 100%; display: flex; justify-content: flex-end;">
-            <div style="background-color: green; height: 30px; width: 100%;"></div>
-            <div id = "playerHealth" style="position: absolute; background-color: blue; top:0; right: 0; bottom: 0; width: 190%;"></div>
-            </div>
-            <!-- Timer -->
-            <div id = "timer" 
-            style="
-            background-color: red; 
-            width: 100px; height: 100px; 
-            flex-shrink: 0; display: flex; 
-            align-items: center; 
-            justify-content: center;
-            ">
-            10
-            </div>
-            <!-- Enemy Health -->
-             <div style="position: relative; height: 30px; width: 100%;">
-            <div style="background-color: green; height: 30px;"></div>
-            <div id = "enemyHealth" style="position: absolute; background-color: blue; top:0; right: 0; bottom: 0; left: 0;"></div>
-            </div>
-            <div></div>
-        </div>
-        <div id="displayText" 
+    <div
+      style="
+        position: relative;
+        display: inline-block;
+        border: 1px solid red;
+        width: 1024px;
+        height: 576px;
+        overflow: hidden;
+      "
+    >
+      <div
         style="
-        position:absolute; 
-        color:white;
-        display: none;
-        align-items: center; 
-        justify-content: center; 
-        top: 0; left: 0; 
-        bottom: 0; 
-        right: 0;">
-        Tie
+          position: absolute;
+          display: flex;
+          width: 100%;
+          align-items: center;
+          padding: 20px;
+        "
+      >
+        <!-- Player Health -->
+        <div
+          style="
+            position: relative;
+            height: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+          "
+        >
+          <div style="background-color: green; height: 30px; width: 100%"></div>
+          <div
+            id="playerHealth"
+            style="
+              position: absolute;
+              background-color: blue;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              width: 100%;
+            "
+          ></div>
         </div>
-<canvas id="canvas"></canvas>
+        <!-- Timer -->
+        <div
+          id="timer"
+          style="
+            background-color: red;
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          10
+        </div>
+        <!-- Enemy Health -->
+        <div style="position: relative; height: 30px; width: 100%">
+          <div style="background-color: green; height: 30px"></div>
+          <div
+            id="enemyHealth"
+            style="
+              position: absolute;
+              background-color: blue;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+            "
+          ></div>
+        </div>
+        <div></div>
+      </div>
+      <div
+        id="displayText"
+        style="
+          position: absolute;
+          color: white;
+          display: none;
+          align-items: center;
+          justify-content: center;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+        "
+      >
+        Tie
+      </div>
+      <canvas id="canvas"></canvas>
     </div>
 
-<script src="index.js"></script>
-</body>
+    <script src="index.js"></script>
+  </body>
 </html>
-
