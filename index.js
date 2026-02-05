@@ -157,6 +157,9 @@ const keys = {
   d: {
     pressed: false,
   },
+  s:{
+    pressed: false,
+  },
   ArrowUp: {
     pressed: false,
   },
@@ -326,91 +329,6 @@ function animate() {
   }
 }
 animate();
-window.addEventListener("keydown", (event) => {
-  if (player.health <= 0 || enemy.health <= 0 || timer === 0) return;
-  switch (event.key) {
-    case "w":
-      if (player.velocity.y === 0) player.velocity.y = -7;
-      break;
-    case "a":
-      keys.a.pressed = true;
-      player.lastKey = "a";
-      break;
-    case "d":
-      keys.d.pressed = true;
-      player.lastKey = "d";
-      break;
-    case "s":
-      if (!player.isAttacking && !player.isShieldBroken) {
-        player.isShielding = true;
-      }
-      break;
-    case " ":
-      if (!keys.space.pressed) {
-        player.attack();
-        keys.space.pressed = true;
-      }
-      break;
-    case "ArrowUp":
-      if (enemy.velocity.y === 0) enemy.velocity.y = -7;
-      break;
-    case "ArrowLeft":
-      keys.ArrowLeft.pressed = true;
-      enemy.lastKey = "ArrowLeft";
-      break;
-    case "ArrowRight":
-      keys.ArrowRight.pressed = true;
-      enemy.lastKey = "ArrowRight";
-      break;
-    case "ArrowDown":
-      if (!keys.ArrowDown.pressed) {
-        enemy.attack();
-        keys.ArrowDown.pressed = true;
-      }
-      break;
-    case "1":
-      if (!enemy.isAttacking && !enemy.isShieldBroken) {
-        enemy.isShielding = true;
-      }
-      break;
-  }
-});
-
-window.addEventListener("keyup", (event) => {
-  if (!gameStarted) return;
-  switch (event.key) {
-    case "w":
-      keys.w.pressed = false;
-      break;
-    case "a":
-      keys.a.pressed = false;
-      break;
-    case "d":
-      keys.d.pressed = false;
-      break;
-    case "s":
-      player.isShielding = false;
-      break;
-    case " ":
-      keys.space.pressed = false;
-      break;
-    case "ArrowUp":
-      keys.ArrowUp.pressed = false;
-      break;
-    case "ArrowLeft":
-      keys.ArrowLeft.pressed = false;
-      break;
-    case "ArrowRight":
-      keys.ArrowRight.pressed = false;
-      break;
-    case "ArrowDown":
-      keys.ArrowDown.pressed = false;
-      break;
-    case "1":
-      enemy.isShielding = false;
-      break;
-  }
-});
 function rematch() {
   timer = 60;
   isPaused = false;
@@ -478,3 +396,89 @@ window.addEventListener("keydown", (event) => {
     togglePause();
   }
 });
+window.addEventListener("keydown", (event) => {
+  if (player.health <= 0 || enemy.health <= 0 || timer === 0) return;
+  switch (event.key) {
+    case "w":
+      if (player.velocity.y === 0) player.velocity.y = -7;
+      break;
+    case "a":
+      keys.a.pressed = true;
+      player.lastKey = "a";
+      break;
+    case "d":
+      keys.d.pressed = true;
+      player.lastKey = "d";
+      break;
+    case " ":
+      if (!player.isAttacking && !player.isShieldBroken) {
+        player.isShielding = true;
+      }
+      break;
+    case "s":
+      if (!keys.s.pressed) {
+        player.attack();
+        keys.s.pressed = true;
+      }
+      break;
+    case "ArrowUp":
+      if (enemy.velocity.y === 0) enemy.velocity.y = -7;
+      break;
+    case "ArrowLeft":
+      keys.ArrowLeft.pressed = true;
+      enemy.lastKey = "ArrowLeft";
+      break;
+    case "ArrowRight":
+      keys.ArrowRight.pressed = true;
+      enemy.lastKey = "ArrowRight";
+      break;
+    case "ArrowDown":
+      if (!keys.ArrowDown.pressed) {
+        enemy.attack();
+        keys.ArrowDown.pressed = true;
+      }
+      break;
+    case "1":
+      if (!enemy.isAttacking && !enemy.isShieldBroken) {
+        enemy.isShielding = true;
+      }
+      break;
+  }
+});
+
+window.addEventListener("keyup", (event) => {
+  if (!gameStarted) return;
+  switch (event.key) {
+    case "w":
+      keys.w.pressed = false;
+      break;
+    case "a":
+      keys.a.pressed = false;
+      break;
+    case "d":
+      keys.d.pressed = false;
+      break;
+    case " ":
+      player.isShielding = false;
+      break;
+    case "s":
+      keys.s.pressed = false;
+      break;
+    case "ArrowUp":
+      keys.ArrowUp.pressed = false;
+      break;
+    case "ArrowLeft":
+      keys.ArrowLeft.pressed = false;
+      break;
+    case "ArrowRight":
+      keys.ArrowRight.pressed = false;
+      break;
+    case "ArrowDown":
+      keys.ArrowDown.pressed = false;
+      break;
+    case "1":
+      enemy.isShielding = false;
+      break;
+  }
+});
+
