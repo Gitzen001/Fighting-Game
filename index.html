@@ -4,12 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
       * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
+  font-family: "Press Start 2P", system-ui;
+  font-weight: 400;
+  font-style: normal;
       }
       body {
         overflow: hidden;
@@ -126,18 +131,21 @@
         <div
           style="
             position: relative;
-            height: 30px;
             width: 100%;
             display: flex;
             justify-content: flex-end;
+                border-top: 4px solid white;
+            border-left: 4px solid white;
+            border-bottom: 4px solid white;
+            
           "
         >
-          <div style="background-color: green; height: 30px; width: 100%"></div>
+          <div style="background-color: red; height: 30px; width: 100%"></div>
           <div
             id="playerHealth"
             style="
               position: absolute;
-              background-color: blue;
+              background-color: #818CF8;
               top: 0;
               right: 0;
               bottom: 0;
@@ -149,25 +157,30 @@
         <div
           id="timer"
           style="
-            background-color: red;
+            background-color: black;
             width: 100px;
-            height: 100px;
+            height: 50px;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: white;
+        border: 4px solid white;
+            font-size: 24px;
           "
         >
           10
         </div>
         <!-- Enemy Health -->
-        <div style="position: relative; height: 30px; width: 100%">
-          <div style="background-color: green; height: 30px"></div>
+        <div style="position: relative;width: 100%; border-top: 4px solid white;
+            border-right: 4px solid white;
+            border-bottom: 4px solid white;">
+          <div style="background-color: red; height: 30px"></div>
           <div
             id="enemyHealth"
             style="
               position: absolute;
-              background-color: blue;
+              background-color: #818CF8;
               top: 0;
               right: 0;
               bottom: 0;
@@ -196,12 +209,12 @@
         <h1 id="winnerName" style="font-size: 48px; margin-bottom: 20px"></h1>
 
         <div style="display: flex; gap: 20px">
-          <button
+          <!-- <button
             onclick="rematch()"
             style="padding: 10px 20px; cursor: pointer"
           >
             Rematch
-          </button>
+          </button> -->
           <button
             onclick="goToMenu()"
             style="padding: 10px 20px; cursor: pointer"
@@ -243,7 +256,9 @@
       </div>
       <canvas id="canvas"></canvas>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
+    <script src = "js/utilis.js"></script>
+    <script src = "js/classes.js"></script>
     <script src="index.js"></script>
     <script src="esp32.js"></script>
   </body>
