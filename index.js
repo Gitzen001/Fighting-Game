@@ -8,7 +8,7 @@ canvas.height = 576;
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 0.2;
-
+let isPaused = false;
 class Sprite {
   constructor({ position, velocity, color = "red", offset }) {
     this.position = position;
@@ -28,10 +28,33 @@ class Sprite {
     this.color = color;
     this.isAttacking;
     this.health = 100;
+    this.isShielding = false;
+    this.shieldHealth = 100;
+    this.maxShieldHealth = 100;
+    this.isShieldBroken = false;
   }
   draw() {
     ctx.fillStyle = this.color;
     ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+
+    if (this.isShielding && !this.isShieldBroken) {
+      ctx.strokeStyle = "cyan";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(
+        this.position.x - 5,
+        this.position.y - 5,
+        this.width + 10,
+        this.height + 10,
+      );
+      // Shield Health Bar
+      ctx.fillStyle = "cyan";
+      ctx.fillRect(
+        this.position.x,
+        this.position.y - 20,
+        (this.shieldHealth / this.maxShieldHealth) * this.width,
+        10,
+      );
+    }
     if (this.isAttacking) {
       ctx.fillStyle = "blue";
       ctx.fillRect(
@@ -45,6 +68,19 @@ class Sprite {
 
   update() {
     this.draw();
+    if (!this.isShielding || this.isShieldBroken) {
+      if (this.shieldHealth < this.maxShieldHealth) {
+        this.shieldHealth += 0.2;
+      }
+    }
+    if (this.shieldHealth >= this.maxShieldHealth) {
+      this.isShieldBroken = false;
+    }
+    if (this.shieldHealth <= 0) {
+      this.shieldHealth = 0;
+      this.isShieldBroken = true;
+      this.isShielding = false;
+    }
     this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
     this.attackBox.position.y = this.position.y;
     this.position.x += this.velocity.x;
@@ -61,6 +97,8 @@ class Sprite {
     } else this.velocity.y += gravity; //gravity
   }
   attack() {
+    if (this.isShielding || this.isShieldBroken) return;
+
     this.isAttacking = true;
     setTimeout(() => {
       this.isAttacking = false;
@@ -151,18 +189,20 @@ function determineWinner({ player, enemy, timerId }) {
 let timer = 60;
 let timerId;
 function decreaseTimer() {
-  if (timer > 0) {
-    timerId = setTimeout(decreaseTimer, 1000);
+  if (timer > 0 && !isPaused) {
     timer--;
     document.querySelector("#timer").innerHTML = timer;
   }
   if (timer === 0) {
     determineWinner({ player, enemy, timerId });
+  } else {
+    timerId = setTimeout(decreaseTimer, 1000);
   }
 }
 decreaseTimer();
 function animate() {
   window.requestAnimationFrame(animate);
+  if (isPaused) return;
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   player.update();
@@ -241,38 +281,45 @@ function animate() {
     }
   }
   //player movement
+  let playerSpeed = 5;
+  if (player.isShielding) playerSpeed = 2;
   if (keys.a.pressed && player.lastKey === "a") {
-    player.velocity.x = -5;
+    player.velocity.x = -playerSpeed;
   } else if (keys.d.pressed && player.lastKey === "d") {
-    player.velocity.x = 5;
+    player.velocity.x = playerSpeed;
   }
-  //enemy movement
+
+  //Enemy movement
+  let enemySpeed = 5;
+  if (enemy.isShielding) enemySpeed = 2;
   if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
-    enemy.velocity.x = -5;
+    enemy.velocity.x = -enemySpeed;
   } else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
-    enemy.velocity.x = 5;
+    enemy.velocity.x = enemySpeed;
   }
   if (
-    rectangularCollision({
-      rectangle1: player,
-      rectangle2: enemy,
-    }) &&
+    rectangularCollision({ rectangle1: player, rectangle2: enemy }) &&
     player.isAttacking
   ) {
     player.isAttacking = false;
-    enemy.health -= 10;
-    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
+    if (enemy.isShielding && !enemy.isShieldBroken) {
+      enemy.shieldHealth -= 20;
+    } else {
+      enemy.health -= 10;
+      document.querySelector("#enemyHealth").style.width = enemy.health + "%";
+    }
   }
   if (
-    rectangularCollision({
-      rectangle1: enemy,
-      rectangle2: player,
-    }) &&
+    rectangularCollision({ rectangle1: enemy, rectangle2: player }) &&
     enemy.isAttacking
   ) {
     enemy.isAttacking = false;
-    player.health -= 10;
-    document.querySelector("#playerHealth").style.width = player.health + "%";
+    if (player.isShielding && !player.isShieldBroken) {
+      player.shieldHealth -= 20;
+    } else {
+      player.health -= 10;
+      document.querySelector("#playerHealth").style.width = player.health + "%";
+    }
   }
 
   //end game based on health
@@ -295,6 +342,11 @@ window.addEventListener("keydown", (event) => {
     case "d":
       keys.d.pressed = true;
       player.lastKey = "d";
+      break;
+    case "s":
+      if (!player.isAttacking && !player.isShieldBroken) {
+        player.isShielding = true;
+      }
       break;
     case " ":
       if (!keys.space.pressed) {
@@ -319,6 +371,11 @@ window.addEventListener("keydown", (event) => {
         keys.ArrowDown.pressed = true;
       }
       break;
+    case "1":
+      if (!enemy.isAttacking && !enemy.isShieldBroken) {
+        enemy.isShielding = true;
+      }
+      break;
   }
 });
 
@@ -332,6 +389,9 @@ window.addEventListener("keyup", (event) => {
       break;
     case "d":
       keys.d.pressed = false;
+      break;
+    case "s":
+      player.isShielding = false;
       break;
     case " ":
       keys.space.pressed = false;
@@ -348,5 +408,25 @@ window.addEventListener("keyup", (event) => {
     case "ArrowDown":
       keys.ArrowDown.pressed = false;
       break;
+    case "1":
+      enemy.isShielding = false;
+      break;
+  }
+});
+function togglePause() {
+  if (enemy.health <= 0 || player.health <= 0 || timer === 0) return; // Don't pause if game is over
+
+  isPaused = !isPaused;
+  const menu = document.querySelector("#pauseMenu");
+  if (isPaused) {
+    menu.style.display = "flex";
+  } else {
+    menu.style.display = "none";
+  }
+}
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "p" || event.key === "P") {
+    togglePause();
   }
 });
