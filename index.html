@@ -17,12 +17,28 @@
         width: 100vw;
         height: 100vh;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
       }
+      #connectBle {
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #ff4757;
+        color: white;
+        border: 2px solid white;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 15px;
+        transition: all 0.2s;
+        z-index: 100;
+      }
+      #connectBle.connected { background-color: #2ed573; }
     </style>
   </head>
   <body>
+     <button id="connectBle">LINK DATA CABLE</button>
     <!-- Container div -->
     <div
       style="
@@ -229,5 +245,6 @@
     </div>
 
     <script src="index.js"></script>
+    <script src="esp32.js"></script>
   </body>
 </html>
